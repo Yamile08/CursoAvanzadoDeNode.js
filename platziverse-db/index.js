@@ -9,10 +9,15 @@ module.exports = async function (config) {
   const AgentModel = setupAgentModel(config)
   const MetricModel = setupMetricModel(config)
 
-  AgentModel.hasMany(MetricModel) //un agente puede tener muchas metricas
-  MetricModel.belongsTo(AgentModel) //una metrica pertenece a un agente
+  AgentModel.hasMany(MetricModel)
+  MetricModel.belongsTo(AgentModel)
 
   await sequelize.authenticate()
+
+  if (config.setup) {
+    await sequelize.sync({ force: true }) //si no existen en la base de datos las tablas respectivas,
+    								      // sequelize automaticamente los va a crear, y force: true lo que hace
+  }										 // es que si esta creada la borra y la crea nuevamete para ella hay que tener miucho cuidado
 
   const Agent = {}
   const Metric = {}
