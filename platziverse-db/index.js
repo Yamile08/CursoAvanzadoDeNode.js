@@ -3,8 +3,21 @@
 const setupDatabase = require('./lib/db')
 const setupAgentModel = require('./models/agent')
 const setupMetricModel = require('./models/metric')
+const defaults = require('defaults')
 
 module.exports = async function (config) {
+  config = defaults(config, {
+    dialect: 'sqlite',
+    pool: {
+      max: 10,
+      min: 0,
+      idle: 10000
+    },
+    query: {
+      raw: true
+    }
+  })
+
   const sequelize = setupDatabase(config)
   const AgentModel = setupAgentModel(config)
   const MetricModel = setupMetricModel(config)
@@ -15,9 +28,8 @@ module.exports = async function (config) {
   await sequelize.authenticate()
 
   if (config.setup) {
-    await sequelize.sync({ force: true }) //si no existen en la base de datos las tablas respectivas,
-    								      // sequelize automaticamente los va a crear, y force: true lo que hace
-  }										 // es que si esta creada la borra y la crea nuevamete para ella hay que tener miucho cuidado
+    await sequelize.sync({ force: true })
+  }
 
   const Agent = {}
   const Metric = {}
