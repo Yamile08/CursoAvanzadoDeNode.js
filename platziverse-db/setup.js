@@ -5,15 +5,14 @@ const inquirer = require('inquirer')
 const chalk = require('chalk')
 const db = require('./')
 
-const prompt = inquirer.createPromptModule() //advertencia sobre el borrado de base de datos
+const prompt = inquirer.createPromptModule()
 
 async function setup () {
-  const answer = await prompt([  //advertencia sobre el borrado de base de datos
-
+  const answer = await prompt([
     {
       type: 'confirm',
       name: 'setup',
-      message: 'This will destroy your database, are you sure?' //advertencia sobre el borrado de base de datos
+      message: 'This will destroy your database, are you sure?'
     }
   ])
 
@@ -38,7 +37,7 @@ async function setup () {
 }
 
 function handleFatalError (err) {
-  console.error(`${chalk.red('[fatal error]')} ${err.message}`) //chalk.red('fata error') en caso de error nos muestra en la consola el mensaje en rojo
+  console.error(`${chalk.red('[fatal error]')} ${err.message}`)
   console.error(err.stack)
   process.exit(1)
 }
